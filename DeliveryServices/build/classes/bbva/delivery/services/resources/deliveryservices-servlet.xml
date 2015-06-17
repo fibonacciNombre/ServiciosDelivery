@@ -35,6 +35,9 @@
 	
 	<context:component-scan base-package="
         bbva.delivery.services.controller" />
+        
+    <context:component-scan base-package="
+        bbva.delivery.services.secure" />
 
 	<mvc:annotation-driven />
 	<aop:aspectj-autoproxy />

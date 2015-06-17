@@ -18,12 +18,14 @@
 	<context:component-scan base-package="bbva.delivery.services.service" />
 	
 	<context:component-scan base-package="bbva.delivery.services.comun.service" />
+	
 
 
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
 
 	<tx:annotation-driven />
 

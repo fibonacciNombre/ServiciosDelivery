@@ -6,12 +6,12 @@
 		 
   <display-name>DeliveryServices</display-name>
   
-  <context-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>
-            	classpath:bbva/delivery/services/resources/security-context.xml
-            </param-value>
-  </context-param>
+<!--   <context-param> -->
+<!--             <param-name>contextConfigLocation</param-name> -->
+<!--             <param-value> -->
+<!--             	classpath:bbva/delivery/services/resources/security-context.xml -->
+<!--             </param-value> -->
+<!--   </context-param> -->
   
   <servlet>
 		<servlet-name>SpringServlet</servlet-name>
