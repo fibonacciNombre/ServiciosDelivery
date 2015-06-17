@@ -3,6 +3,8 @@ package bbva.delivery.services.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,18 +48,20 @@ public class ServicesController {
 
     }
 	
-	 @RequestMapping(value = "", method = RequestMethod.POST, produces = "application/json")
-	 @ResponseBody
-	 public Observer addObserver(@RequestBody Observer o) throws Exception {
 
-       Usuario usuario = new Usuario();
-       
-       deliveryService.validarUsuarioToken(usuario);
-       System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
-	       o.setId(34L);
-	       o.setAccreditation("Lobaton");
-	       System.out.println("create observer" + "-->" + o.getId());
-	       return o;
+	@RequestMapping(value = "", method = RequestMethod.POST, produces = "application/json")
+	 @ResponseBody
+	 public Observer addObserver(@RequestBody Observer o,HttpServletResponse k) throws Exception {
+
+			 Usuario usuario = new Usuario();
+			 o.getApprovedUser().equals("hshshs");
+		       deliveryService.validarUsuarioToken(usuario);
+		       System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
+			       o.setId(34L);
+			       o.setAccreditation("Lobaton");
+			       System.out.println("create observer" + "-->" + o.getId());
+			       return o;
+
 	 }
 
 }

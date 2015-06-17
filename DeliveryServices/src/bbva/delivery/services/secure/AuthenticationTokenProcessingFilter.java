@@ -2,9 +2,9 @@ package bbva.delivery.services.secure;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +27,12 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {//im
  //   @SuppressWarnings("deprecation")
 	@SuppressWarnings("unchecked")
 	public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
+            FilterChain chain) throws IOException  {
 //        @SuppressWarnings("unchecked")
 //        Map<String, String[]> parms = request.getParameterMap();
-        
+        try {
+			
+		
         HttpServletRequest h = (HttpServletRequest) request;
        // PrintWriter out = null;
         System.out.println(h.getHeader("token"));
@@ -97,6 +99,23 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {//im
 			
         }
         // continue thru the filter chain
-        
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	StringWriter errors = new StringWriter();
+        	e.printStackTrace(new PrintWriter(errors));
+        	
+			// TODO: handle exception
+        	 System.out.println("hubo un error");
+             HttpServletResponse k = (HttpServletResponse) response;
+             
+             k.setContentType("application/json");
+             PrintWriter out = response.getWriter();
+
+             JSONObject obj = new JSONObject();
+             obj.put("estado", "error 500");
+             obj.put("coderror", "2");
+             obj.put("descerror", errors.toString());
+             out.print(obj);
+		}
     }
 }
