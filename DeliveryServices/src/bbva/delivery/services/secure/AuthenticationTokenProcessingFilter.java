@@ -3,6 +3,8 @@ package bbva.delivery.services.secure;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletRequest;
@@ -13,109 +15,75 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.json.simple.JSONObject;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
 
 import bbva.delivery.services.bean.Usuario;
 import bbva.delivery.services.service.imp.DeliveryServiceImp;
 
-//@Service
-public class AuthenticationTokenProcessingFilter extends GenericFilterBean {//implements AuthenticationTokenProcessingFilterService {
+public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
+
+	private final static String USERNAME = "USERNAME";
+	private final static String PASSWORD = "PASSWORD";
 	
-//	@Autowired
-//	DeliveryService deliveryService;
+	
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException  {
 
- //   @SuppressWarnings("deprecation")
-	@SuppressWarnings("unchecked")
-	public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException  {
-//        @SuppressWarnings("unchecked")
-//        Map<String, String[]> parms = request.getParameterMap();
         try {
-			
-		
-        HttpServletRequest h = (HttpServletRequest) request;
-       // PrintWriter out = null;
-        System.out.println(h.getHeader("token"));
-        Usuario usuario = new Usuario();
-        DeliveryServiceImp g = new DeliveryServiceImp();
-        try {
+				
+	        HttpServletRequest h = (HttpServletRequest) request;
+	        System.out.println(h.getHeader("token"));
+	        
+	        Usuario usuario = new Usuario();
+	        DeliveryServiceImp g = new DeliveryServiceImp();
 			g.validarUsuarioToken(usuario);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
-        //if (parms.containsKey("token")) {
-        
-        
-        if (h.getHeader("token") != null) {
-           // String strToken = parms.get("token")[0]; // grab the first "token" parameter
-            System.out.println("Token: " + h.getHeader("token"));
+	        System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
+	        
+	        if (h.getHeader("token") != null) {
+	            System.out.println("Token: " + h.getHeader("token"));
+	            
+	            if ("test".equals(h.getHeader("token"))){
+	                System.out.println("valid token found");
+	                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+	                UserDetails userDetails = new User(USERNAME, PASSWORD, true, true, true, true,authorities);
+	                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
+	                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails((HttpServletRequest) request));
+	                SecurityContextHolder.getContext().setAuthentication(authentication);         
+	                chain.doFilter(request, response);
+	            }else{
+	                System.out.println("invalid token");
+	                this.customPoint(response, "error", "1", "Unauthorized: Authentication token was invalid.");
 
-           // if (strToken.equals("test")) {
-            if ("test".equals(h.getHeader("token"))){
-                System.out.println("valid token found");
-                
-//                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-//                authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
-//
-//                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("test", "test");
-//                token.setDetails(new WebAuthenticationDetails((HttpServletRequest) request));
-//                Authentication authentication = new UsernamePasswordAuthenticationToken("test", "test", authorities); //this.authenticationProvider.authenticate(token);
-//                
-//                SecurityContextHolder.getContext().setAuthentication(authentication);
-                chain.doFilter(request, response);
-                
-            }else{
-                System.out.println("invalid token");
-                HttpServletResponse k = (HttpServletResponse) response;
-                k.setContentType("application/json");
-                PrintWriter out = response.getWriter();
-                
-
-                JSONObject obj = new JSONObject();
-                obj.put("estado", "error");
-                obj.put("coderror", "1");
-                obj.put("descerror", "Unauthorized: Authentication token was invalid.");
-                out.print(obj);
-             
-//    			k.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token was invalid." );
-   			
-            }
-        } else {
-            System.out.println("no token found");
-            HttpServletResponse k = (HttpServletResponse) response;
-            
-            k.setContentType("application/json");
-            PrintWriter out = response.getWriter();
-
-            JSONObject obj = new JSONObject();
-            obj.put("estado", "error");
-            obj.put("coderror", "0");
-            obj.put("descerror", "Unauthorized: Authentication token was missing.");
-            out.print(obj);
-            
-//			k.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token was missing." );
-			
-        }
-        // continue thru the filter chain
+	            }
+	        } else {
+	            System.out.println("no token found");
+	            this.customPoint(response, "error", "0", "Unauthorized: Authentication token was missing.");
+	        }
+	        
         } catch (Exception e) {
         	e.printStackTrace();
         	StringWriter errors = new StringWriter();
         	e.printStackTrace(new PrintWriter(errors));
-        	
-			// TODO: handle exception
-        	 System.out.println("hubo un error");
-             HttpServletResponse k = (HttpServletResponse) response;
-             
-             k.setContentType("application/json");
-             PrintWriter out = response.getWriter();
-
-             JSONObject obj = new JSONObject();
-             obj.put("estado", "error 500");
-             obj.put("coderror", "2");
-             obj.put("descerror", errors.toString());
-             out.print(obj);
+			System.out.println("hubo un error");
+			this.customPoint(response, "error 500", "2", errors.toString());
+			
 		}
     }
+	
+	@SuppressWarnings("unchecked")
+	public void customPoint(ServletResponse response, String error, String codError, String descError) throws IOException{
+		 HttpServletResponse k = (HttpServletResponse) response;
+         k.setContentType("application/json");
+         PrintWriter out = response.getWriter();
+         JSONObject obj = new JSONObject();
+         obj.put("estado", error);
+         obj.put("codError", codError);
+         obj.put("descError", descError);
+         out.print(obj);
+	}
 }
