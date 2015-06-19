@@ -53,7 +53,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 	                UserDetails userDetails = new User(USERNAME, PASSWORD, true, true, true, true,authorities);
 	                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
 	                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails((HttpServletRequest) request));
-	                SecurityContextHolder.getContext().setAuthentication(authentication);         
+	                SecurityContextHolder.getContext().setAuthentication(authentication);   
 	                chain.doFilter(request, response);
 	            }else{
 	                System.out.println("invalid token");

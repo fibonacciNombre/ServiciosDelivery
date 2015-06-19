@@ -20,7 +20,7 @@ import bbva.delivery.services.bean.Usuario;
 import bbva.delivery.services.service.DeliveryService;
 
 @Controller
-@RequestMapping(value = "/observers")
+@RequestMapping(value = "/services")
 public class ServicesController {
 	
 	@Autowired
@@ -63,5 +63,52 @@ public class ServicesController {
 			       return o;
 
 	 }
+	
+	//INICIO DE LOS SERVICIOS
+	
+	//RF - 04
+	@RequestMapping(value = "/validarDNICourier", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Observer validarDNICourier(@RequestBody Observer o) throws Exception {
 
+		Usuario usuario = new Usuario();
+		o.getApprovedUser().equals("hshshs");
+		deliveryService.validarUsuarioToken(usuario);
+		System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
+		o.setId(35L);
+		o.setAccreditation("ValidarDNICourier");
+		System.out.println("create observer" + "-->" + o.getId());
+		return o;
+
+	 }
+	//RF - 05
+	@RequestMapping(value = "/getVisitasUsuario", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Observer getVisitasUsuario(@RequestBody Observer o) throws Exception {
+
+		Usuario usuario = new Usuario();
+		o.getApprovedUser().equals("hshshs");
+		deliveryService.validarUsuarioToken(usuario);
+		System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
+		o.setId(36L);
+		o.setAccreditation("getVisitasUsuario");
+		System.out.println("create observer" + "-->" + o.getId());
+		return o;
+
+	 }
+	//RF - 20
+	@RequestMapping(value = "/changeEstadoRegistro", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Observer changeEstadoRegistro(@RequestBody Observer o) throws Exception {
+
+		Usuario usuario = new Usuario();
+		o.getApprovedUser().equals("hshshs");
+		deliveryService.validarUsuarioToken(usuario);
+		System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
+		o.setId(37L);
+		o.setAccreditation("changeEstadoRegistro");
+		System.out.println("create observer" + "-->" + o.getId());
+		return o;
+
+	 }
 }
