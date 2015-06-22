@@ -14,7 +14,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import bbva.delivery.services.bean.EstadoRegistro;
+import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
+import bbva.delivery.services.bean.RequestGetVisitasUsuario;
+import bbva.delivery.services.bean.RequestValidarCourier;
+import bbva.delivery.services.bean.ResponseChangeEstadoRegistro;
+import bbva.delivery.services.bean.ResponseGetVisitasUsuario;
+import bbva.delivery.services.bean.ResponseValidarCourier;
+import bbva.delivery.services.bean.Tx;
 import bbva.delivery.services.bean.Usuario;
+import bbva.delivery.services.bean.ValidarCourier;
+import bbva.delivery.services.bean.VisitasUsuario;
 import bbva.delivery.services.dao.DeliveryDao;
 import bbva.delivery.services.dao.imp.DeliveryDaoImp;
 import bbva.delivery.services.service.DeliveryService;
@@ -94,6 +104,83 @@ public class DeliveryServiceImp implements DeliveryService {
 		
 		return daoImp.validarUsuario(usuario);
 			
+	}
+	
+	public ResponseValidarCourier validarDNICourier(RequestValidarCourier requestValidarCourier){
+		ResponseValidarCourier responseValidarCourier = new ResponseValidarCourier();
+		if(requestValidarCourier == null || requestValidarCourier.getCourier() == null || requestValidarCourier.getDni() == null){
+			Tx tx = new Tx();
+			tx.setCodigo("1");
+			tx.setMensaje("error");
+			responseValidarCourier.setTx(tx);
+			return responseValidarCourier;
+		}else{
+			
+			if("Elvis".equals(requestValidarCourier.getCourier()) && "12345678".equals(requestValidarCourier.getDni())){
+				
+				Tx tx = new Tx();
+				tx.setCodigo("0");
+				tx.setMensaje("correcto");
+				ValidarCourier validarCourier = new ValidarCourier();
+				validarCourier.setCodigo("000");
+				validarCourier.setMensaje("Usuario Activo");
+				responseValidarCourier.setTx(tx);
+				responseValidarCourier.setValidarCourier(validarCourier);
+			
+				return responseValidarCourier;
+			}else{
+				Tx tx = new Tx();
+				tx.setCodigo("0");
+				tx.setMensaje("correcto");
+				ValidarCourier validarCourier = new ValidarCourier();
+				validarCourier.setCodigo("001");
+				validarCourier.setMensaje("Usuario no existe");
+				responseValidarCourier.setTx(tx);
+				responseValidarCourier.setValidarCourier(validarCourier);
+				return responseValidarCourier;
+			}
+		}
+	}
+	
+	public ResponseGetVisitasUsuario getVisitasUsuario(RequestGetVisitasUsuario requestGetVisitasUsuario){
+		
+		ResponseGetVisitasUsuario responseGetVisitasUsuario =  new ResponseGetVisitasUsuario();
+		
+		Tx tx = new Tx();
+		tx.setCodigo("0");
+		tx.setMensaje("correcto");
+		VisitasUsuario visitasUsuario = new VisitasUsuario();
+		visitasUsuario.setDni(requestGetVisitasUsuario.getDni());
+		visitasUsuario.setCoordenadas("1234");
+		visitasUsuario.setCoordenadas("7845");
+		visitasUsuario.setDireccion("Av. Dean Valdivia");
+		visitasUsuario.setDistrito("San Isiadro");
+		visitasUsuario.setFechaEntrega("28/06/2015");
+		visitasUsuario.setHorarioEntrega("15-16 horas");
+		visitasUsuario.setLineaCredito("5000");
+		visitasUsuario.setNombres(requestGetVisitasUsuario.getCourier());
+		visitasUsuario.setPrimDigitosTar("4250");
+		visitasUsuario.setTipoTarjeta("Signature");
+		visitasUsuario.setUltiDigitosTar("1420");
+		visitasUsuario.setCodigoEntrega("666");
+		
+		responseGetVisitasUsuario.setVisitasUsuario(visitasUsuario);
+		responseGetVisitasUsuario.setTx(tx);
+		return responseGetVisitasUsuario;
+	}
+	
+	public ResponseChangeEstadoRegistro changeEstadoRegistro(RequestChangeEstadoRegistro requestChangeEstadoRegistro){
+		
+		ResponseChangeEstadoRegistro responseChangeEstadoRegistro =  new ResponseChangeEstadoRegistro();
+		Tx tx = new Tx();
+		tx.setCodigo("0");
+		tx.setMensaje("correcto");
+		EstadoRegistro estadoRegistro = new EstadoRegistro();
+		estadoRegistro.setCodigo("0");
+		estadoRegistro.setMensaje("Entregado sin inconvenientes");
+		responseChangeEstadoRegistro.setTx(tx);
+		responseChangeEstadoRegistro.setEstadoRegistro(estadoRegistro);
+		return responseChangeEstadoRegistro;
 	}
 
 }

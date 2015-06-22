@@ -19,7 +19,6 @@ public class ResponseValidarCourier implements Serializable  {
 	
 	private Tx tx;
 	
-	
 	private ValidarCourier validarCourier;
 	
 	public Tx getTx() {
