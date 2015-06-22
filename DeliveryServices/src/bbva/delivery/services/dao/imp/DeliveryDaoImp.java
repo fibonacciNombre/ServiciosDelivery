@@ -84,5 +84,15 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 		  System.out.println("Ejecutando metodo obtEstadoUsuarioWeb");  
 	  }
 	
+	public boolean validarUsuario(Usuario usuario) throws Exception{
+		
+		if ("android".equals(usuario.getUsuario()) && "pepito123".equals(usuario.getPassword()) ){
+			return true;
+		}else{
+			return false;
+		}
+			
+	}
+	
 }
 

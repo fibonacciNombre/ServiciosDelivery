@@ -87,5 +87,13 @@ public class DeliveryServiceImp implements DeliveryService {
          byte[] decrypted = cipher.doFinal(enc);
          return new String(decrypted);
 	}
+	
+	public boolean validarUsuario(Usuario usuario) throws Exception{
+	    
+		DeliveryDaoImp daoImp = new DeliveryDaoImp();
+		
+		return daoImp.validarUsuario(usuario);
+			
+	}
 
 }
