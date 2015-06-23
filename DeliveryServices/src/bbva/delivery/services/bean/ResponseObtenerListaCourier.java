@@ -1,6 +1,7 @@
 package bbva.delivery.services.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,16 +11,16 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class ResponseChangeEstadoRegistro implements Serializable {
+public class ResponseObtenerListaCourier implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 9152858066284632644L;
+	private static final long serialVersionUID = -2096865025979642422L;
 	
 	private Tx tx;
 	
-	private EstadoRegistro estadoRegistro;
+	private List<Courier> listaCourier;
 
 	public Tx getTx() {
 		return tx;
@@ -28,14 +29,16 @@ public class ResponseChangeEstadoRegistro implements Serializable {
 	public void setTx(Tx tx) {
 		this.tx = tx;
 	}
-	
+
 	@JsonProperty("rpta")
-	public EstadoRegistro getEstadoRegistro() {
-		return estadoRegistro;
+	public List<Courier> getListaCourier() {
+		return listaCourier;
 	}
 
-	public void setEstadoRegistro(EstadoRegistro estadoRegistro) {
-		this.estadoRegistro = estadoRegistro;
+	public void setListaCourier(List<Courier> listaCourier) {
+		this.listaCourier = listaCourier;
 	}
+	
+	
 
 }

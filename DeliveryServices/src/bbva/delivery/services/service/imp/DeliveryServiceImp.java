@@ -3,6 +3,8 @@ package bbva.delivery.services.service.imp;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.crypto.Cipher;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import bbva.delivery.services.bean.Courier;
 import bbva.delivery.services.bean.Delivery;
 import bbva.delivery.services.bean.EstadoRegistro;
 import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
@@ -21,6 +24,7 @@ import bbva.delivery.services.bean.RequestGetVisitasUsuario;
 import bbva.delivery.services.bean.RequestValidarCourier;
 import bbva.delivery.services.bean.ResponseChangeEstadoRegistro;
 import bbva.delivery.services.bean.ResponseGetVisitasUsuario;
+import bbva.delivery.services.bean.ResponseObtenerListaCourier;
 import bbva.delivery.services.bean.ResponseValidarCourier;
 import bbva.delivery.services.bean.Tx;
 import bbva.delivery.services.bean.Usuario;
@@ -99,16 +103,10 @@ public class DeliveryServiceImp implements DeliveryService {
          return new String(decrypted);
 	}
 	
-	@SuppressWarnings("static-access")
 	public boolean validarUsuario(Usuario usuario) throws Exception{
-		Delivery j = new Delivery();
-		
-		DeliveryDaoImp daoImp = new DeliveryDaoImp();
-		//daoImp.lstDelivery(j);
-		
-		daoImp.getInstance().lstDelivery(j);
-		return daoImp.validarUsuario(usuario);
-			
+		Delivery param = new Delivery();
+		deliveryDao.lstDelivery(param);
+		return deliveryDao.validarUsuario(usuario);
 	}
 	
 	public ResponseValidarCourier validarDNICourier(RequestValidarCourier requestValidarCourier){
@@ -190,4 +188,36 @@ public class DeliveryServiceImp implements DeliveryService {
 		return responseChangeEstadoRegistro;
 	}
 
+	public ResponseObtenerListaCourier obtenerListaCourier(){
+		ResponseObtenerListaCourier responseObtenerListaCourier = new ResponseObtenerListaCourier();
+		Tx tx = new Tx();
+		tx.setCodigo("0");
+		tx.setMensaje("correcto");
+		List<Courier> couriers = new ArrayList<Courier>();
+//		Courier courier = new Courier();
+//		courier.setIdCourier(363);
+//		courier.setCodBbva("738393");
+//		courier.setNombre("Casaca de Matraca");
+//		couriers.add(courier);
+//		Courier courier2 = new Courier();
+//		courier2.setIdCourier(364);
+//		courier2.setCodBbva("738394");
+//		courier2.setNombre("Jon Snow");
+//		couriers.add(courier2);
+		
+		couriers = deliveryDao.obtenerListaCourier();
+		responseObtenerListaCourier.setListaCourier(couriers);
+		responseObtenerListaCourier.setTx(tx);
+		return responseObtenerListaCourier;
+		
+	}
+	
+	public Usuario addUsuario(Usuario usuario) throws Exception{
+		
+		usuario.setPassword(this.encriptar(KEY, IV, usuario.getPassword()));
+		
+		return deliveryDao.addUsuario(usuario);
+	}
+	
+	
 }

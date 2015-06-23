@@ -90,46 +90,46 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 	        System.out.println(h.getHeader(AUTHORIZATION_PROPERTY));
 	        authorization = h.getHeader(AUTHORIZATION_PROPERTY);
 	        
-	        Usuario usuario = new Usuario();
-	        DeliveryServiceImp g = new DeliveryServiceImp();
-			g.validarUsuarioToken(usuario);
-	        System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
+//	        Usuario usuario = new Usuario();
+//	        DeliveryServiceImp g = new DeliveryServiceImp();
+//			g.validarUsuarioToken(usuario);
+//	        System.out.println(ToStringBuilder.reflectionToString(usuario,ToStringStyle.MULTI_LINE_STYLE));
 	        
 	        if (authorization == null || authorization.isEmpty()) {
 	        	System.out.println("no authorization found");
 	            this.customPoint(response, "error", "0", "Unauthorized: Authentication authorization was missing.");
 	        }else{
-	        	System.out.println("AUTHORIZATION_PROPERTY: " + authorization);
-	        	 
-	        	encodedUserPassword = authorization.replaceFirst(AUTHENTICATION_SCHEME + " ", ""); 
-	        	 
-	     		usernameAndPassword = new String(Base64.decode(encodedUserPassword));
-	     		System.out.println("usernameAndPassword --> "+usernameAndPassword);
-	     		
-	     		final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-	    	    final String username = tokenizer.nextToken();
-	    	    final String password = tokenizer.nextToken();
-	    	    
-	    	    System.out.println("username --> "+username);
-	    	    System.out.println("password --> "+password);
-	    	    
-	    	    Usuario u = new Usuario();
-	    	    u.setUsuario(username);
-	    	    u.setPassword(password);
-	     		
-	            //if ("android".equals(username) && "pepito123".equals(password) ){
-	    	    if(g.validarUsuario(u)){
-	                System.out.println("valid authorization found");
+//	        	System.out.println("AUTHORIZATION_PROPERTY: " + authorization);
+//	        	 
+//	        	encodedUserPassword = authorization.replaceFirst(AUTHENTICATION_SCHEME + " ", ""); 
+//	        	 
+//	     		usernameAndPassword = new String(Base64.decode(encodedUserPassword));
+//	     		System.out.println("usernameAndPassword --> "+usernameAndPassword);
+//	     		
+//	     		final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
+//	    	    final String username = tokenizer.nextToken();
+//	    	    final String password = tokenizer.nextToken();
+//	    	    
+//	    	    System.out.println("username --> "+username);
+//	    	    System.out.println("password --> "+password);
+//	    	    
+//	    	    Usuario u = new Usuario();
+//	    	    u.setUsuario(username);
+//	    	    u.setPassword(password);
+//	     		
+//	            //if ("android".equals(username) && "pepito123".equals(password) ){
+//	    	    if(g.validarUsuario(u)){
+	                System.out.println("Authorization found");
 	                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 	                UserDetails userDetails = new User(USERNAME, PASSWORD, true, true, true, true,authorities);
 	                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
 	                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails((HttpServletRequest) request));
 	                SecurityContextHolder.getContext().setAuthentication(authentication);   
 	                chain.doFilter(request, response);
-	            }else{
-	                System.out.println("invalid authorization");
-	                this.customPoint(response, "error", "1", "Unauthorized: Authentication authorization was invalid.");
-	            }
+//	            }else{
+//	                System.out.println("invalid authorization");
+//	                this.customPoint(response, "error", "1", "Unauthorized: Authentication authorization was invalid.");
+//	            }
 	        }
 	        
         } catch (Exception e) {

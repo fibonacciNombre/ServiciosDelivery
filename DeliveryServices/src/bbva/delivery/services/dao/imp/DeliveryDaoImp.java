@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import bbva.delivery.services.bean.Courier;
 import bbva.delivery.services.bean.Delivery;
 import bbva.delivery.services.bean.Usuario;
 import bbva.delivery.services.comun.dao.imp.JdbcDaoBase;
@@ -150,6 +151,50 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 //		 
 //		return lista;​
 //	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Courier> obtenerListaCourier(){
+		System.out.println("INI: Ejecutando metodo obtenerListaCourier");
+		List<Courier> lista = null;
+		
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "pq_del_servicios", "sp_lst_courier_servicio");
+		
+		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Courier.class);
+		
+		out = call.execute(in);
+		
+		lista = (List<Courier>) out.get("a_cursor");
+		System.out.println("FIN: Ejecutando metodo obtenerListaCourier");
+		return lista;
+	}
+	
+	public Usuario addUsuario(Usuario usuario){
+		System.out.println("INI: Ejecutando metodo obtenerListaCourier");
+		
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "pq_del_servicios", "sp_lst_courier_servicio");
+		
+		JdbcHelper.setInParameter(call, in, "a_usuario", OracleTypes.VARCHAR, usuario.getUsuario());
+		JdbcHelper.setInParameter(call, in, "a_password", OracleTypes.VARCHAR, usuario.getPassword());
+		//JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Courier.class);
+		
+		out = call.execute(in);
+		
+		System.out.println("FIN: Ejecutando metodo obtenerListaCourier");
+		
+		return usuario;
+	}
 
 }
 
