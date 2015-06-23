@@ -1,6 +1,7 @@
 package bbva.delivery.services.dao.imp;
 
 import java.sql.Types;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -13,9 +14,14 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import bbva.delivery.services.bean.Delivery;
 import bbva.delivery.services.bean.Usuario;
 import bbva.delivery.services.comun.dao.imp.JdbcDaoBase;
 import bbva.delivery.services.dao.DeliveryDao;
+
+import com.rimac.sas.utiles.comunes.JdbcHelper;
+
+
 
 @Repository("deliveryDao")
 public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
@@ -94,5 +100,56 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 			
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Delivery> lstDelivery(Delivery param){
+		System.out.println("INI: Ejecutando metodo lstDelivery");
+		List<Delivery> lista = null;
+		
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "pq_del_courier", "sp_lst_delivery");
+		
+		JdbcHelper.setInParameter(call, in, "a_nrodocumentocli", OracleTypes.VARCHAR, param.getNrodocumentocli());
+		JdbcHelper.setInParameter(call, in, "a_nombrescli", OracleTypes.VARCHAR, param.getNombrescli());
+		JdbcHelper.setInParameter(call, in, "a_nrodocumentocou", OracleTypes.VARCHAR, param.getNrodocumentocli());
+		JdbcHelper.setInParameter(call, in, "a_nombrecou", OracleTypes.VARCHAR, param.getNombrescli());
+		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Delivery.class);
+		
+		out = call.execute(in);
+		
+		lista = (List<Delivery>) out.get("a_cursor");
+		System.out.println("FIN: Ejecutando metodo lstDelivery");
+		return lista;
+	}
+	
+//	@SuppressWarnings("unchecked")
+//	public List<Delivery> lstDelivery(Delivery param) {
+//		
+//		List<Delivery> lista = null; 
+//		MapSqlParameterSource in = null;
+//
+//		SimpleJdbcCall call = null;
+//		Map<String, Object> out = null;
+//		in = new MapSqlParameterSource();
+//
+//		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(),
+//				resources.getString("BBVA"),
+//				resources.getString("pq_del_courier"),
+//				"sp_lst_delivery");
+// 
+//		 
+//		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Delivery.class);
+//		
+//
+//		out = call.execute(in);
+//		lista = (List<Delivery>) out.get("a_cursor");
+//		 
+//		return lista;​
+//	}
+
 }
 

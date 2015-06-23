@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import bbva.delivery.services.bean.Delivery;
 import bbva.delivery.services.bean.EstadoRegistro;
 import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
 import bbva.delivery.services.bean.RequestGetVisitasUsuario;
@@ -98,15 +99,21 @@ public class DeliveryServiceImp implements DeliveryService {
          return new String(decrypted);
 	}
 	
+	@SuppressWarnings("static-access")
 	public boolean validarUsuario(Usuario usuario) throws Exception{
-	    
-		DeliveryDaoImp daoImp = new DeliveryDaoImp();
+		Delivery j = new Delivery();
 		
+		DeliveryDaoImp daoImp = new DeliveryDaoImp();
+		//daoImp.lstDelivery(j);
+		
+		daoImp.getInstance().lstDelivery(j);
 		return daoImp.validarUsuario(usuario);
 			
 	}
 	
 	public ResponseValidarCourier validarDNICourier(RequestValidarCourier requestValidarCourier){
+		Delivery j = new Delivery();
+		deliveryDao.lstDelivery(j);
 		ResponseValidarCourier responseValidarCourier = new ResponseValidarCourier();
 		if(requestValidarCourier == null || requestValidarCourier.getCourier() == null || requestValidarCourier.getDni() == null){
 			Tx tx = new Tx();
