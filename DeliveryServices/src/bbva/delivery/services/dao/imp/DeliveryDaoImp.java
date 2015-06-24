@@ -1,5 +1,6 @@
 package bbva.delivery.services.dao.imp;
 
+import java.math.BigDecimal;
 import java.sql.Types;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 	public void validarUsuarioToken(Usuario usuario){
 		
 		usuario.setUsuario("too");
-		usuario.setPassword("old");
+		usuario.setContrasena("old");
 		
 	}
 	
@@ -93,12 +94,44 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 	
 	public boolean validarUsuario(Usuario usuario) throws Exception{
 		
-		if ("android".equals(usuario.getUsuario()) && "pepito123".equals(usuario.getPassword()) ){
+		if ("android".equals(usuario.getCodusuario()) && "pepito123".equals(usuario.getContrasena()) ){
 			return true;
 		}else{
 			return false;
 		}
 			
+	}
+	//trae un usuario
+	@SuppressWarnings("unchecked")
+	public Usuario getUsuario(Usuario usuario){
+		
+		System.out.println("INI: Ejecutando metodo getUsuario");
+		List<Usuario> usr = null;
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "PQ_DEL_SERVICIOS", "sp_obt_usuario_servicio");
+		
+		JdbcHelper.setInOutParameter(call,in,"a_codusuario",Types.VARCHAR,usuario.getCodusuario());
+		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Usuario.class);
+		
+		out = call.execute(in);
+		
+		
+		usr = (List<Usuario>) out.get("a_cursor");
+		
+		System.out.println("FIN: Ejecutando metodo getUsuario");
+		
+		return usr.get(0);
+		
+		
+//		Usuario j = new Usuario();
+//		j.setContrasena("en2wrf7xCzW4AauuAHCgvQ==");
+//		j.setCodusuario("Android");
+//		return j;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -175,25 +208,60 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 	}
 	
 	public Usuario addUsuario(Usuario usuario){
-		System.out.println("INI: Ejecutando metodo obtenerListaCourier");
-		
+		System.out.println("INI: Ejecutando metodo addUsuario");
+		Usuario usr = new Usuario();
 		MapSqlParameterSource in = null;
 		
 		SimpleJdbcCall call= null;
 		Map<String, Object> out = null;
 		in = new MapSqlParameterSource();
 		
-		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "pq_del_servicios", "sp_lst_courier_servicio");
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "pq_del_usuario", "sp_mnt_usuario");
 		
+		JdbcHelper.setInOutParameter(call,in,"a_idusuario",Types.NUMERIC, usuario.getIdeusuario());
+		JdbcHelper.setInParameter(call, in, "a_contrasena", OracleTypes.VARCHAR, usuario.getContrasena());
+		JdbcHelper.setInParameter(call, in, "a_idtercero", OracleTypes.NUMERIC, usuario.getIdtercero());
+		JdbcHelper.setInParameter(call, in, "a_idperfil", OracleTypes.NUMERIC, usuario.getIdperfil());
+		JdbcHelper.setInParameter(call, in, "a_idpestado", OracleTypes.NUMERIC, usuario.getIdpestado());
+		JdbcHelper.setInParameter(call, in, "a_codusuario", OracleTypes.VARCHAR, usuario.getCodusuario());
+		JdbcHelper.setInParameter(call, in, "a_historial", OracleTypes.VARCHAR, usuario.getHistorial());
+		JdbcHelper.setInParameter(call, in, "a_comentario", OracleTypes.VARCHAR, usuario.getComentario());
 		JdbcHelper.setInParameter(call, in, "a_usuario", OracleTypes.VARCHAR, usuario.getUsuario());
-		JdbcHelper.setInParameter(call, in, "a_password", OracleTypes.VARCHAR, usuario.getPassword());
-		//JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Courier.class);
+//		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Usuario.class);
 		
 		out = call.execute(in);
 		
-		System.out.println("FIN: Ejecutando metodo obtenerListaCourier");
 		
-		return usuario;
+		usr.setIdeusuario(Integer.parseInt(((BigDecimal) out.get("a_idusuario")).toString()));
+		System.out.println("FIN: Ejecutando metodo addUsuario");
+		
+		return usr;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Usuario obtUsuario(Integer id){
+		System.out.println("INI: Ejecutando metodo obtUsuario");
+		List<Usuario> usr = null;
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "pq_del_usuario", "sp_obt_usuario");
+		
+		JdbcHelper.setInOutParameter(call,in,"a_idusuario",Types.NUMERIC,id);
+
+		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Usuario.class);
+		
+		out = call.execute(in);
+		
+		
+		usr = (List<Usuario>) out.get("a_cursor");
+		
+		System.out.println("FIN: Ejecutando metodo obtUsuario");
+		
+		return usr.get(0);
 	}
 
 }

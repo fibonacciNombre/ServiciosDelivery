@@ -8,8 +8,6 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.jboss.resteasy.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -176,15 +174,22 @@ public class ServicesController {
 		    System.out.println("password --> "+password);
 		    
 		    Usuario u = new Usuario();
-		    u.setUsuario(username);
-		    u.setPassword(password);
+		    u.setCodusuario(username);
+		    u.setContrasena(password);
 		    
 		    return deliveryService.validarUsuario(u);
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	@RequestMapping(value = "/addUsuario", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public Usuario addUsuario(@RequestBody Usuario usuario, HttpServletResponse response, HttpServletRequest request) throws Exception {
 		
-		
+			System.out.println("header aaaaaaaaaa   --> "+ request.getHeader("Authorization"));
+			return deliveryService.addUsuario(usuario);
+
 	}
 	
 }

@@ -18,4 +18,8 @@ public interface DeliveryDao{
 	public List<Courier> obtenerListaCourier();
 	
 	public Usuario addUsuario(Usuario usuario);
+	
+	public Usuario getUsuario(Usuario usuario);
+	
+	public Usuario obtUsuario(Integer id);
 }

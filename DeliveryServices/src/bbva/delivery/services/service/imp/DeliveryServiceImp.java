@@ -71,7 +71,7 @@ public class DeliveryServiceImp implements DeliveryService {
 		System.out.println("token random --> "+ token);
 		daoImp.validarUsuarioToken(usuario);
 		
-		usuarioPassword = usuario.getUsuario()+":"+usuario.getPassword();
+		usuarioPassword = usuario.getUsuario()+":"+usuario.getContrasena();
 		
 		cadenaEncriptada = this.encriptar(KEY, IV, usuarioPassword);
 		
@@ -104,9 +104,18 @@ public class DeliveryServiceImp implements DeliveryService {
 	}
 	
 	public boolean validarUsuario(Usuario usuario) throws Exception{
-		Delivery param = new Delivery();
-		deliveryDao.lstDelivery(param);
-		return deliveryDao.validarUsuario(usuario);
+//		Delivery param = new Delivery();
+//		deliveryDao.lstDelivery(param);
+		Usuario usr = deliveryDao.getUsuario(usuario);
+		
+		if(usr != null){
+			if(usuario.getCodusuario().equals(usr.getCodusuario()) && usuario.getContrasena().equals(usr.getContrasena())){
+				return true;
+			}
+		}
+		return false;
+		
+		//return deliveryDao.validarUsuario(usuario);
 	}
 	
 	public ResponseValidarCourier validarDNICourier(RequestValidarCourier requestValidarCourier){
@@ -214,9 +223,12 @@ public class DeliveryServiceImp implements DeliveryService {
 	
 	public Usuario addUsuario(Usuario usuario) throws Exception{
 		
-		usuario.setPassword(this.encriptar(KEY, IV, usuario.getPassword()));
+		usuario.setContrasena(this.encriptar(KEY, IV, usuario.getContrasena()));
+		usuario.setIdpestado(1);
+		usuario.setUsuario("DELIVERY_BBVA");
 		
-		return deliveryDao.addUsuario(usuario);
+		return deliveryDao.obtUsuario(deliveryDao.addUsuario(usuario).getIdeusuario());
+		//return deliveryDao.addUsuario(usuario);
 	}
 	
 	
