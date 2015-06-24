@@ -187,6 +187,7 @@ public class ServicesController {
 	@ResponseBody
 	public Usuario addUsuario(@RequestBody Usuario usuario, HttpServletResponse response, HttpServletRequest request) throws Exception {
 		
+		
 			System.out.println("header aaaaaaaaaa   --> "+ request.getHeader("Authorization"));
 			return deliveryService.addUsuario(usuario);
 
