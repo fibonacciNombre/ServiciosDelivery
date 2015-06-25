@@ -15,24 +15,34 @@ public class EstadoRegistro implements Serializable{
 	 */
 	private static final long serialVersionUID = -4581211446254757303L;
 	
-	private String codigo;
+	private String codigoEntrega;
 	
-	private String mensaje;
-
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	public String getMensaje() {
-		return mensaje;
-	}
-
-	public void setMensaje(String mensaje) {
-		this.mensaje = mensaje;
-	}
+	private String estado;
 	
+	private String motivo;
+
+	public String getCodigoEntrega() {
+		return codigoEntrega;
+	}
+
+	public void setCodigoEntrega(String codigoEntrega) {
+		this.codigoEntrega = codigoEntrega;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
+	}
+
 }

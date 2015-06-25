@@ -119,66 +119,90 @@ public class DeliveryServiceImp implements DeliveryService {
 	}
 	
 	public ResponseValidarCourier validarDNICourier(RequestValidarCourier requestValidarCourier){
-		Delivery j = new Delivery();
-		deliveryDao.lstDelivery(j);
+		
 		ResponseValidarCourier responseValidarCourier = new ResponseValidarCourier();
-		if(requestValidarCourier == null || requestValidarCourier.getCourier() == null || requestValidarCourier.getDni() == null){
+//		if(requestValidarCourier == null || requestValidarCourier.getCourier() == null || requestValidarCourier.getDni() == null){
+//			Tx tx = new Tx();
+//			tx.setCodigo("1");
+//			tx.setMensaje("error");
+//			responseValidarCourier.setTx(tx);
+//			return responseValidarCourier;
+//		}else{
+//			
+//			if("Elvis".equals(requestValidarCourier.getCourier()) && "12345678".equals(requestValidarCourier.getDni())){
+//				
+//				Tx tx = new Tx();
+//				tx.setCodigo("0");
+//				tx.setMensaje("correcto");
+//				ValidarCourier validarCourier = new ValidarCourier();
+//				validarCourier.setCodigo("000");
+//				validarCourier.setMensaje("Usuario Activo");
+//				responseValidarCourier.setTx(tx);
+//				responseValidarCourier.setValidarCourier(validarCourier);
+//			
+//				return responseValidarCourier;
+//			}else{
+//				Tx tx = new Tx();
+//				tx.setCodigo("0");
+//				tx.setMensaje("correcto");
+//				ValidarCourier validarCourier = new ValidarCourier();
+//				validarCourier.setCodigo("001");
+//				validarCourier.setMensaje("Usuario no existe");
+//				responseValidarCourier.setTx(tx);
+//				responseValidarCourier.setValidarCourier(validarCourier);
+//				return responseValidarCourier;
+//			}
+//		}
+		
+		List<ValidarCourier> validarCouriers = deliveryDao.validarDNICourier(requestValidarCourier);
+		if(validarCouriers.isEmpty()){
 			Tx tx = new Tx();
-			tx.setCodigo("1");
-			tx.setMensaje("error");
+			tx.setCodigo("0");
+			tx.setMensaje("correcto");
 			responseValidarCourier.setTx(tx);
-			return responseValidarCourier;
+			ValidarCourier courier = new ValidarCourier();
+			courier.setCodigo("002");
+			courier.setMensaje("Usuario no existe");
+			responseValidarCourier.setValidarCourier(courier);
 		}else{
-			
-			if("Elvis".equals(requestValidarCourier.getCourier()) && "12345678".equals(requestValidarCourier.getDni())){
-				
-				Tx tx = new Tx();
-				tx.setCodigo("0");
-				tx.setMensaje("correcto");
-				ValidarCourier validarCourier = new ValidarCourier();
-				validarCourier.setCodigo("000");
-				validarCourier.setMensaje("Usuario Activo");
-				responseValidarCourier.setTx(tx);
-				responseValidarCourier.setValidarCourier(validarCourier);
-			
-				return responseValidarCourier;
-			}else{
-				Tx tx = new Tx();
-				tx.setCodigo("0");
-				tx.setMensaje("correcto");
-				ValidarCourier validarCourier = new ValidarCourier();
-				validarCourier.setCodigo("001");
-				validarCourier.setMensaje("Usuario no existe");
-				responseValidarCourier.setTx(tx);
-				responseValidarCourier.setValidarCourier(validarCourier);
-				return responseValidarCourier;
-			}
+			Tx tx = new Tx();
+			tx.setCodigo("0");
+			tx.setMensaje("correcto");
+			responseValidarCourier.setTx(tx);
+			ValidarCourier courier = validarCouriers.get(0);
+			courier.setCodigo("000");
+			courier.setMensaje("Usuario activo");
+			responseValidarCourier.setValidarCourier(validarCouriers.get(0));
 		}
+
+		return responseValidarCourier;
 	}
 	
 	public ResponseGetVisitasUsuario getVisitasUsuario(RequestGetVisitasUsuario requestGetVisitasUsuario){
 		
 		ResponseGetVisitasUsuario responseGetVisitasUsuario =  new ResponseGetVisitasUsuario();
+		String fecha = requestGetVisitasUsuario.getDia()+"/"+requestGetVisitasUsuario.getMes()+"/"+requestGetVisitasUsuario.getAnio();
 		
+		//deliveryDao.getVisitasUsuario(requestGetVisitasUsuario, fecha);
 		Tx tx = new Tx();
 		tx.setCodigo("0");
 		tx.setMensaje("correcto");
-		VisitasUsuario visitasUsuario = new VisitasUsuario();
-		visitasUsuario.setDni(requestGetVisitasUsuario.getDni());
-		visitasUsuario.setCoordenadas("1234");
-		visitasUsuario.setCoordenadas("7845");
-		visitasUsuario.setDireccion("Av. Dean Valdivia");
-		visitasUsuario.setDistrito("San Isiadro");
-		visitasUsuario.setFechaEntrega("28/06/2015");
-		visitasUsuario.setHorarioEntrega("15-16 horas");
-		visitasUsuario.setLineaCredito("5000");
-		visitasUsuario.setNombres(requestGetVisitasUsuario.getCourier());
-		visitasUsuario.setPrimDigitosTar("4250");
-		visitasUsuario.setTipoTarjeta("Signature");
-		visitasUsuario.setUltiDigitosTar("1420");
-		visitasUsuario.setCodigoEntrega("666");
+//		VisitasUsuario visitasUsuario = new VisitasUsuario();
+//		visitasUsuario.setDni(requestGetVisitasUsuario.getDni());
+//		visitasUsuario.setCoordenadas("1234");
+//		visitasUsuario.setCoordenadas("7845");
+//		visitasUsuario.setDireccion("Av. Dean Valdivia");
+//		visitasUsuario.setDistrito("San Isiadro");
+//		visitasUsuario.setFechaEntrega("28/06/2015");
+//		visitasUsuario.setHorarioEntrega("15-16 horas");
+//		visitasUsuario.setLineaCredito("5000");
+//		visitasUsuario.setNombres(requestGetVisitasUsuario.getCourier());
+//		visitasUsuario.setPrimDigitosTar("4250");
+//		visitasUsuario.setTipoTarjeta("Signature");
+//		visitasUsuario.setUltiDigitosTar("1420");
+//		visitasUsuario.setCodigoEntrega("666");
 		
-		responseGetVisitasUsuario.setVisitasUsuario(visitasUsuario);
+		responseGetVisitasUsuario.setVisitasUsuarios(deliveryDao.getVisitasUsuario(requestGetVisitasUsuario, fecha));
 		responseGetVisitasUsuario.setTx(tx);
 		return responseGetVisitasUsuario;
 	}
@@ -189,9 +213,12 @@ public class DeliveryServiceImp implements DeliveryService {
 		Tx tx = new Tx();
 		tx.setCodigo("0");
 		tx.setMensaje("correcto");
+		RequestChangeEstadoRegistro rcr = deliveryDao.changeEstadoRegistro(requestChangeEstadoRegistro);
+		
 		EstadoRegistro estadoRegistro = new EstadoRegistro();
-		estadoRegistro.setCodigo("0");
-		estadoRegistro.setMensaje("Entregado sin inconvenientes");
+		estadoRegistro.setEstado(rcr.getEstado());
+		estadoRegistro.setMotivo(rcr.getMotivo());
+		estadoRegistro.setCodigoEntrega(rcr.getCodigoEntrega().toString());
 		responseChangeEstadoRegistro.setTx(tx);
 		responseChangeEstadoRegistro.setEstadoRegistro(estadoRegistro);
 		return responseChangeEstadoRegistro;

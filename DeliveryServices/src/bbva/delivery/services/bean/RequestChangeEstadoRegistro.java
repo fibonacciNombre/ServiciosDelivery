@@ -23,7 +23,9 @@ public class RequestChangeEstadoRegistro implements Serializable {
 	
 	private String estado;
 	
-	private Integer motivo;
+	private String motivo;
+	
+	private String codbbva;
 
 	public String getCourier() {
 		return courier;
@@ -57,12 +59,20 @@ public class RequestChangeEstadoRegistro implements Serializable {
 		this.estado = estado;
 	}
 
-	public Integer getMotivo() {
+	public String getMotivo() {
 		return motivo;
 	}
-
-	public void setMotivo(Integer motivo) {
+	
+	public void setMotivo(String motivo) {
 		this.motivo = motivo;
+	}
+	
+	public String getCodbbva() {
+		return codbbva;
+	}
+	
+	public void setCodbbva(String codbbva) {
+		this.codbbva = codbbva;
 	}
 
 }

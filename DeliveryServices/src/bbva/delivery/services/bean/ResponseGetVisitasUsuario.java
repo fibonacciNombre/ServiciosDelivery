@@ -1,6 +1,7 @@
 package bbva.delivery.services.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,7 +20,7 @@ public class ResponseGetVisitasUsuario implements Serializable {
 	
 	private Tx tx;
 	
-	private VisitasUsuario visitasUsuario;
+	private List<VisitasUsuario> visitasUsuarios;
 	
 	public Tx getTx() {
 		return tx;
@@ -29,11 +30,11 @@ public class ResponseGetVisitasUsuario implements Serializable {
 		this.tx = tx;
 	}
 	@JsonProperty("rpta")
-	public VisitasUsuario getVisitasUsuario() {
-		return visitasUsuario;
+	public List<VisitasUsuario> getVisitasUsuarios() {
+		return visitasUsuarios;
 	}
 	
-	public void setVisitasUsuario(VisitasUsuario visitasUsuario) {
-		this.visitasUsuario = visitasUsuario;
+	public void setVisitasUsuarios(List<VisitasUsuario> visitasUsuarios) {
+		this.visitasUsuarios = visitasUsuarios;
 	}
 }

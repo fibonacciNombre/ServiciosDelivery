@@ -17,7 +17,12 @@ import org.springframework.stereotype.Repository;
 
 import bbva.delivery.services.bean.Courier;
 import bbva.delivery.services.bean.Delivery;
+import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
+import bbva.delivery.services.bean.RequestGetVisitasUsuario;
+import bbva.delivery.services.bean.RequestValidarCourier;
 import bbva.delivery.services.bean.Usuario;
+import bbva.delivery.services.bean.ValidarCourier;
+import bbva.delivery.services.bean.VisitasUsuario;
 import bbva.delivery.services.comun.dao.imp.JdbcDaoBase;
 import bbva.delivery.services.dao.DeliveryDao;
 
@@ -262,6 +267,87 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 		System.out.println("FIN: Ejecutando metodo obtUsuario");
 		
 		return usr.get(0);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<VisitasUsuario> getVisitasUsuario( RequestGetVisitasUsuario requestGetVisitasUsuario, String fecha){
+		System.out.println("INI: Ejecutando metodo getVisitasUsuario");
+		List<VisitasUsuario> visitasUsuarios = null;
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "PQ_DEL_SERVICIOS", "sp_lst_visitas_usuario");
+		
+		JdbcHelper.setInParameter(call, in, "a_codbbva", OracleTypes.VARCHAR, requestGetVisitasUsuario.getCodbbva());
+		JdbcHelper.setInParameter(call, in, "a_nrodocumento", OracleTypes.VARCHAR, requestGetVisitasUsuario.getDni());
+		JdbcHelper.setInParameter(call, in, "a_fecentrega", OracleTypes.VARCHAR, fecha);
+		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, VisitasUsuario.class);
+		
+		
+		out = call.execute(in);
+		
+		
+		visitasUsuarios = (List<VisitasUsuario>) out.get("a_cursor");
+		
+		System.out.println("FIN: Ejecutando metodo getVisitasUsuario");
+		
+		return visitasUsuarios;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ValidarCourier> validarDNICourier( RequestValidarCourier requestValidarCourier){
+		System.out.println("INI: Ejecutando metodo getVisitasUsuario");
+		List<ValidarCourier> validarCourier = null;
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "PQ_DEL_SERVICIOS", "sp_validar_usuario");
+		
+		JdbcHelper.setInParameter(call, in, "a_codbbva", OracleTypes.VARCHAR, requestValidarCourier.getCodbbva());
+		JdbcHelper.setInParameter(call, in, "a_nrodocumento", OracleTypes.VARCHAR, requestValidarCourier.getDni());
+		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, ValidarCourier.class);
+		
+		out = call.execute(in);
+		
+		validarCourier = (List<ValidarCourier>) out.get("a_cursor");
+		
+		System.out.println("FIN: Ejecutando metodo getVisitasUsuario");
+		
+		return validarCourier;
+	}
+	
+	
+	public RequestChangeEstadoRegistro changeEstadoRegistro( RequestChangeEstadoRegistro requestChangeEstadoRegistro){
+		System.out.println("INI: Ejecutando metodo changeEstadoRegistro");
+		//List<ValidarCourier> validarCourier = null;
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "PQ_DEL_SERVICIOS", "sp_act_delivery_entrega");
+		
+		JdbcHelper.setInParameter(call, in, "a_iddelivery", OracleTypes.NUMERIC, requestChangeEstadoRegistro.getCodigoEntrega());
+		JdbcHelper.setInParameter(call, in, "a_estado", OracleTypes.NUMERIC, requestChangeEstadoRegistro.getEstado());
+		JdbcHelper.setInParameter(call, in, "a_motivo", OracleTypes.VARCHAR, requestChangeEstadoRegistro.getMotivo());
+		JdbcHelper.setInParameter(call, in, "a_codbbva", OracleTypes.VARCHAR, requestChangeEstadoRegistro.getCodbbva());
+		JdbcHelper.setInParameter(call, in, "a_nrodocumento", OracleTypes.VARCHAR, requestChangeEstadoRegistro.getDni());
+		//JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, ValidarCourier.class);
+		
+		out = call.execute(in);
+		
+		//validarCourier = (List<ValidarCourier>) out.get("a_cursor");
+		
+		System.out.println("FIN: Ejecutando metodo changeEstadoRegistro");
+		
+		return requestChangeEstadoRegistro;
 	}
 
 }

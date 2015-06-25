@@ -19,11 +19,13 @@ public class RequestGetVisitasUsuario implements Serializable{
 	
 	private String dni;
 	
-	private Integer dia;
+	private String dia;
 	
-	private Integer mes;
+	private String mes;
 	
-	private Integer anio;
+	private String anio;
+	
+	private String codbbva;
 
 	public String getCourier() {
 		return courier;
@@ -40,29 +42,37 @@ public class RequestGetVisitasUsuario implements Serializable{
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-
-	public Integer getDia() {
+	
+	public String getDia() {
 		return dia;
 	}
 
-	public void setDia(Integer dia) {
+	public void setDia(String dia) {
 		this.dia = dia;
 	}
 
-	public Integer getMes() {
+	public String getMes() {
 		return mes;
 	}
 
-	public void setMes(Integer mes) {
+	public void setMes(String mes) {
 		this.mes = mes;
 	}
 
-	public Integer getAnio() {
+	public String getAnio() {
 		return anio;
 	}
 
-	public void setAnio(Integer anio) {
+	public void setAnio(String anio) {
 		this.anio = anio;
+	}
+
+	public String getCodbbva() {
+		return codbbva;
+	}
+	
+	public void setCodbbva(String codbbva) {
+		this.codbbva = codbbva;
 	}
 
 }

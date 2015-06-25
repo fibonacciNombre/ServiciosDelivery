@@ -17,6 +17,8 @@ public class RequestValidarCourier implements Serializable {
 
 	private String courier;
 	
+	private String codbbva;
+	
 	private String dni;
 
 	public String getCourier() {
@@ -35,6 +37,12 @@ public class RequestValidarCourier implements Serializable {
 		this.dni = dni;
 	}
 	
+	public String getCodbbva() {
+		return codbbva;
+	}
 	
+	public void setCodbbva(String codbbva) {
+		this.codbbva = codbbva;
+	}
 
 }

@@ -4,7 +4,12 @@ import java.util.List;
 
 import bbva.delivery.services.bean.Courier;
 import bbva.delivery.services.bean.Delivery;
+import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
+import bbva.delivery.services.bean.RequestGetVisitasUsuario;
+import bbva.delivery.services.bean.RequestValidarCourier;
 import bbva.delivery.services.bean.Usuario;
+import bbva.delivery.services.bean.ValidarCourier;
+import bbva.delivery.services.bean.VisitasUsuario;
 
 public interface DeliveryDao{
 	void test();
@@ -22,4 +27,10 @@ public interface DeliveryDao{
 	public Usuario getUsuario(Usuario usuario);
 	
 	public Usuario obtUsuario(Integer id);
+	
+	public List<VisitasUsuario> getVisitasUsuario( RequestGetVisitasUsuario requestGetVisitasUsuario, String fecha);
+	
+	public List<ValidarCourier> validarDNICourier( RequestValidarCourier requestValidarCourier);
+	
+	public RequestChangeEstadoRegistro changeEstadoRegistro( RequestChangeEstadoRegistro requestChangeEstadoRegistro);
 }
