@@ -19,6 +19,7 @@ import bbva.delivery.services.bean.Courier;
 import bbva.delivery.services.bean.Delivery;
 import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
 import bbva.delivery.services.bean.RequestGetVisitasUsuario;
+import bbva.delivery.services.bean.RequestInformarEntregaCourier;
 import bbva.delivery.services.bean.RequestValidarCourier;
 import bbva.delivery.services.bean.Usuario;
 import bbva.delivery.services.bean.ValidarCourier;
@@ -349,6 +350,33 @@ public class DeliveryDaoImp extends JdbcDaoBase implements DeliveryDao {
 		
 		return requestChangeEstadoRegistro;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Delivery> informarEntregaCourier( RequestInformarEntregaCourier requestInformarEntregaCourier){
+		System.out.println("INI: Ejecutando metodo informarEntregaCourier");
+		List<Delivery> deliveries = null;
+		MapSqlParameterSource in = null;
+		
+		SimpleJdbcCall call= null;
+		Map<String, Object> out = null;
+		in = new MapSqlParameterSource();
+		
+		call = JdbcHelper.initializeSimpleJdbcCallProcedure(getJdbcTemplate(), "BBVA", "PQ_DEL_SERVICIOS", "sp_obt_delivery_servicio");
+		
+		JdbcHelper.setInParameter(call, in, "a_nrodocumento", OracleTypes.VARCHAR, requestInformarEntregaCourier.getDni());
+		JdbcHelper.setInParameter(call, in, "a_codbbva", OracleTypes.VARCHAR, requestInformarEntregaCourier.getCodbbva());
+		JdbcHelper.setInParameter(call, in, "a_iddelivery", OracleTypes.NUMERIC, requestInformarEntregaCourier.getCodigoEntrega());
+		JdbcHelper.setOutParameter(call, "a_cursor", OracleTypes.CURSOR, Delivery.class);
+		
+		out = call.execute(in);
+		
+		deliveries = (List<Delivery>) out.get("a_cursor");
+		
+		System.out.println("FIN: Ejecutando metodo informarEntregaCourier");
+		
+		return deliveries;
+	}
+	
 
 }
 

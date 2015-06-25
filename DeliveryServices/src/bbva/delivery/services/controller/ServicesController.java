@@ -20,10 +20,16 @@ import bbva.delivery.services.bean.Observer;
 import bbva.delivery.services.bean.Person;
 import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
 import bbva.delivery.services.bean.RequestGetVisitasUsuario;
+import bbva.delivery.services.bean.RequestInformarActivacionBBVA;
+import bbva.delivery.services.bean.RequestInformarEntregaCourier;
+import bbva.delivery.services.bean.RequestTransferirArchivo;
 import bbva.delivery.services.bean.RequestValidarCourier;
 import bbva.delivery.services.bean.ResponseChangeEstadoRegistro;
 import bbva.delivery.services.bean.ResponseGetVisitasUsuario;
+import bbva.delivery.services.bean.ResponseInformarActivacionBBVA;
+import bbva.delivery.services.bean.ResponseInformarEntregaCourier;
 import bbva.delivery.services.bean.ResponseObtenerListaCourier;
+import bbva.delivery.services.bean.ResponseTransferirArchivo;
 import bbva.delivery.services.bean.ResponseValidarCourier;
 import bbva.delivery.services.bean.Tx;
 import bbva.delivery.services.bean.Usuario;
@@ -148,6 +154,66 @@ public class ServicesController {
             tx.setMensaje("Unauthorized: Authentication authorization was invalid.");
             responseObtenerListaCourier.setTx(tx);
             return responseObtenerListaCourier;
+        }
+
+    }
+	
+	//RF-07-A1
+	@RequestMapping(value = "/informarEntregaCourier", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public ResponseInformarEntregaCourier informarEntregaCourier(@RequestBody RequestInformarEntregaCourier requestInformarEntregaCourier,HttpServletResponse response, HttpServletRequest request) throws Exception {
+
+		if(this.customAutorization(request)){
+			System.out.println("header aaaaaaaaaa   --> "+ request.getHeader("Authorization"));
+			return deliveryService.informarEntregaCourier(requestInformarEntregaCourier);
+        }else{
+            System.out.println("invalid authorization");
+            ResponseInformarEntregaCourier responseInformarEntregaCourier = new ResponseInformarEntregaCourier();
+            Tx tx = new Tx();
+            tx.setCodigo("1");
+            tx.setMensaje("Unauthorized: Authentication authorization was invalid.");
+            responseInformarEntregaCourier.setTx(tx);
+            return responseInformarEntregaCourier;
+        }
+
+    }
+	
+	//RF-07-A2
+	@RequestMapping(value = "/informarActivacionBBVA", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public ResponseInformarActivacionBBVA informarActivacionBBVA(@RequestBody RequestInformarActivacionBBVA requestInformarActivacionBBVA, HttpServletResponse response, HttpServletRequest request) throws Exception {
+
+		if(this.customAutorization(request)){
+			System.out.println("header aaaaaaaaaa   --> "+ request.getHeader("Authorization"));
+			return deliveryService.informarActivacionBBVA(requestInformarActivacionBBVA);
+        }else{
+            System.out.println("invalid authorization");
+            ResponseInformarActivacionBBVA responseInformarActivacionBBVA = new ResponseInformarActivacionBBVA();
+            Tx tx = new Tx();
+            tx.setCodigo("1");
+            tx.setMensaje("Unauthorized: Authentication authorization was invalid.");
+            responseInformarActivacionBBVA.setTx(tx);
+            return responseInformarActivacionBBVA;
+        }
+
+    }
+	
+	//RF-22
+	@RequestMapping(value = "/transferirArchivo", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public ResponseTransferirArchivo transferirArchivo(@RequestBody RequestTransferirArchivo requestTransferirArchivo, HttpServletResponse response, HttpServletRequest request) throws Exception {
+
+		if(this.customAutorization(request)){
+			System.out.println("header aaaaaaaaaa   --> "+ request.getHeader("Authorization"));
+			return deliveryService.transferirArchivo(requestTransferirArchivo);
+        }else{
+            System.out.println("invalid authorization");
+            ResponseTransferirArchivo responseTransferirArchivo = new ResponseTransferirArchivo();
+            Tx tx = new Tx();
+            tx.setCodigo("1");
+            tx.setMensaje("Unauthorized: Authentication authorization was invalid.");
+            responseTransferirArchivo.setTx(tx);
+            return responseTransferirArchivo;
         }
 
     }

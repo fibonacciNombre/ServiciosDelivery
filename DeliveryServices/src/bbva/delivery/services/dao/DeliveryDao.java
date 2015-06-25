@@ -6,6 +6,7 @@ import bbva.delivery.services.bean.Courier;
 import bbva.delivery.services.bean.Delivery;
 import bbva.delivery.services.bean.RequestChangeEstadoRegistro;
 import bbva.delivery.services.bean.RequestGetVisitasUsuario;
+import bbva.delivery.services.bean.RequestInformarEntregaCourier;
 import bbva.delivery.services.bean.RequestValidarCourier;
 import bbva.delivery.services.bean.Usuario;
 import bbva.delivery.services.bean.ValidarCourier;
@@ -33,4 +34,6 @@ public interface DeliveryDao{
 	public List<ValidarCourier> validarDNICourier( RequestValidarCourier requestValidarCourier);
 	
 	public RequestChangeEstadoRegistro changeEstadoRegistro( RequestChangeEstadoRegistro requestChangeEstadoRegistro);
+	
+	public List<Delivery> informarEntregaCourier( RequestInformarEntregaCourier requestInformarEntregaCourier);
 }

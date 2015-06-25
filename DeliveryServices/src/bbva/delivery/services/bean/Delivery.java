@@ -1,7 +1,6 @@
 package bbva.delivery.services.bean;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Map;
 
 import commons.mapper.ResourceManager;
@@ -17,8 +16,8 @@ public class Delivery {
 	private String ultdigtarjeta;
 	private String nrocontrato;
 	private BigDecimal mtoasoctarjeta;
-	private Date fecentrega;
-	private Date horaentrega;
+	private String fecentrega;
+	private String horaentrega;
 	private String lugarentrega;
 	private String indverificacion;
 	private String direccioncli;
@@ -35,6 +34,9 @@ public class Delivery {
 	private Integer idpestadocarga;
 	private String mensajecarga;
 	private BigDecimal grupocarga;
+	
+	private String correocourier;
+	private String nombretercero;
 	
 	public Delivery(){
 		
@@ -117,19 +119,21 @@ public class Delivery {
 		this.mtoasoctarjeta = mtoasoctarjeta;
 	}
 
-	public Date getFecentrega() {
+	
+
+	public String getFecentrega() {
 		return fecentrega;
 	}
 
-	public void setFecentrega(Date fecentrega) {
+	public void setFecentrega(String fecentrega) {
 		this.fecentrega = fecentrega;
 	}
 
-	public Date getHoraentrega() {
+	public String getHoraentrega() {
 		return horaentrega;
 	}
 
-	public void setHoraentrega(Date horaentrega) {
+	public void setHoraentrega(String horaentrega) {
 		this.horaentrega = horaentrega;
 	}
 
@@ -260,7 +264,21 @@ public class Delivery {
 	public void setGrupocarga(BigDecimal grupocarga) {
 		this.grupocarga = grupocarga;
 	}
+
+	public String getCorreocourier() {
+		return correocourier;
+	}
+
+	public void setCorreocourier(String correocourier) {
+		this.correocourier = correocourier;
+	}
+
+	public String getNombretercero() {
+		return nombretercero;
+	}
 	
-	
+	public void setNombretercero(String nombretercero) {
+		this.nombretercero = nombretercero;
+	}
 
 }
